@@ -1,0 +1,12 @@
+<form [formGroup]="loginForm" autocomplete="off">
+
+  <div>
+    <input matInput type="text" placeholder="Enter Your Email" formControlName="email" autocomplete="off" />
+  </div>
+
+  <div>
+    <input matInput type="password" placeholder="" formControlName="password" autocomplete="off" />
+  </div>
+
+  <button (click)="submit()">Submit</button>
+</form>

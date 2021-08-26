@@ -1,0 +1,27 @@
+
+nav {
+  background-color: black;
+  color: white;
+}
+
+nav ul{
+  text-align: center;
+  list-style-type: none;
+  font-size: 1.2rem;
+  padding: .7em;
+}
+
+ul li{
+  margin: .5em;
+}
+li a:hover{
+  color: lightgray;
+  cursor: pointer;
+}
+
+@media(min-width:768px){
+  nav ul{
+    display: flex;
+    justify-content: flex-start;
+  }
+}
