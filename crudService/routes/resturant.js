@@ -4,12 +4,29 @@ const got = require('got');
 const {Resturant} = require('../model/resturant');
 const AUTHENTICATION_URL = 'http://localhost:3000';
 
-route.get('/:id', async (req, res) => {
+route.get('/', async (req, res) => {
+  
   try {
-    const resturantId = req.params.id;
-    const resturant = await Resturant.findById(resturantId).exec();
-    if(!resturant) return res.status(404).send({error: 'id not found'});
-    res.send(resturant);  
+    let resturantName = req.query.name;
+    let resturantCity = req.query.city;
+    let resturants;
+    
+    if(resturantName && !resturantCity){
+      const $regex = RegExp(`${resturantName}`);
+      resturants = await Resturant.find({name: $regex}).exec();
+    
+    }else if(resturantCity && !resturantName){
+      resturants = await Resturant.find({'address.city': resturantCity}).exec();
+      
+    }else if( resturantName && resturantCity){
+      const $regex = RegExp(`${resturantName}`);
+      resturants = await Resturant.find({name: $regex, 'address.city': resturantCity}).exec();
+    }else{
+      resturants = await Resturant.find({});
+    }
+
+    res.send(resturants);  
+
   } catch (error) {
     res.status(500).send({error});
   }
@@ -21,16 +38,16 @@ route.get('/', async (req, res) => {
 })
 
 route.post('/', async(req, res) => {
+  // console.log('i am here..', req.body)
   try {
-    // console.log('i am here..', req.headers.authorization)
 
     const {body, statusCode} = await got(AUTHENTICATION_URL+'/api/auth/me', {
       headers: {authorization: req.headers.authorization},
       responseType: 'json'
     })
 
-    if( statusCode !== 200 || !body.userId) return res.status(401).send({error:'unautorized user'});
     console.log('resbonse: ', {body, statusCode});
+    if( statusCode !== 200 || !body.userId) return res.status(401).send({error:'unautorized user'});
 
     console.log('req body: ', req.body)
     const resturant = new Resturant({
