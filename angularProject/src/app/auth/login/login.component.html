@@ -1,5 +1,7 @@
 <form [formGroup]="loginForm" autocomplete="off">
-
+  <div *ngIf="signup">
+    <input matInput type="text" placeholder="Enter Your Name" formControlName="name" autocomplete="off" />
+  </div>
   <div>
     <input matInput type="text" placeholder="Enter Your Email" formControlName="email" autocomplete="off" />
   </div>
@@ -8,5 +10,6 @@
     <input matInput type="password" placeholder="" formControlName="password" autocomplete="off" />
   </div>
 
-  <button (click)="submit()">Submit</button>
+  <button (click)="submit()">Login</button>
+  <button *ngIf="!signup" (click)="showSignup()">Signup</button>
 </form>

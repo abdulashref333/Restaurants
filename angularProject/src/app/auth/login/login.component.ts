@@ -9,6 +9,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 	loginForm!: FormGroup;
+  signupForm!: FormGroup;
+  signup:boolean = false;
 
   constructor(
     private authService:AuthService,
@@ -23,6 +25,7 @@ export class LoginComponent implements OnInit {
 
   initLoginForm() {
 		this.loginForm = this.fb.group({
+      name:['', Validators.required],
 			email: ['', Validators.compose([
 				Validators.required,
 				Validators.minLength(3),
@@ -39,15 +42,26 @@ export class LoginComponent implements OnInit {
 	}
 
   submit() {
-		const controls = this.loginForm.controls;
+    const controls = this.loginForm.controls;
+    this.loginForm.controls["name"].disable();
 		/** check form */
 		if (this.loginForm.invalid) {
-			Object.keys(controls).forEach(controlName =>
+      Object.keys(controls).forEach(controlName =>
 				controls[controlName].markAsTouched()
-			);
-			return;
-		}
+        );
+        return;
+      }
 
+      console.log('i am her..')
+      if(this.signup && false){
+        const user = {
+          name: controls.name.value,
+          email: controls.email.value,
+          password: controls.password.value
+        }
+        return this.authService.signUp(user);
+      }else{
+      }
 		// this.loading = true;
 
 		const authData = {
@@ -56,6 +70,7 @@ export class LoginComponent implements OnInit {
 		};
 		this.authService
 			.login(authData.email, authData.password)
+      console.log('i am after login')
 		// 	.pipe(
 		// 		tap(user => {
 		// 			if (user) {
@@ -88,5 +103,7 @@ export class LoginComponent implements OnInit {
 		// 	)
 		// 	.subscribe();
 	}
-
+  showSignup(){
+    this.signup = true;
+  }
 }

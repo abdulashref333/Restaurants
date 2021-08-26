@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { map, switchMap, catchError, tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';;
+import {  tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+;
 
 const API_URL = environment.authenticationServiceUrl;
 const API_TOKEN = 'authTokenKey';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService{
 
 	// Authentication/Authorization
@@ -17,16 +19,19 @@ export class AuthService{
   ){
 
   }
-	protected authorization() {
+
+  authorization() {
 		const token = JSON.parse(String(localStorage.getItem('authTokenKey')));
 
 		if (token) {
-
-			return {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-				Authorization: 'Bearer ' + token.token,
-			};
+      console.log('tok', token)
+      let headers = new HttpHeaders()
+        .set('content-type','application/json')
+        .set('Accept','application/json')
+        .set('authorization','Bearer ' + token.token)
+      // headers=headers.append('Access-Control-Allow-Origin', '*')
+      // headers=headers.append('content-type','application/x-www-form-urlencoded')
+			return headers;
 		} else {
 
 			return {
@@ -36,23 +41,23 @@ export class AuthService{
 		}
 	}
 
-	login(userName: string, password: string) {
+	login(email: string, password: string) {
 		let credential;
-		if (this.isEmail(userName)) {
-			credential = { username: userName, password };
-
-			if (this.isEmail(userName)) {
-				credential = { username: userName, password };
-
-			} else {
-				credential = { username: userName, password, mobile: userName };
-			}
-			this.http.post<any>(`${API_URL}/login/`, credential).pipe(
-        tap(res => console.log(res))
+		if (this.isEmail(email)) {
+			credential = { email: email, password };
+      console.log('i am here')
+			this.http.post<any>(`${API_URL}/users/login`, credential).pipe(
+        tap(res => {
+          console.log(res);
+          localStorage.setItem('authTokenKey', JSON.stringify({token: res.token, userId:res.user._id}) )
+        })
 			).subscribe(res => console.log(res));
 		}
 	}
 
+  signUp(user:any){
+    this.http.post<any>(`${API_URL}/users/signup`, user).subscribe(res => console.log(res.result));
+  }
 	// getUserByToken(): Observable<any> {
 	// 	const userTokenStr = localStorage.getItem(API_TOKEN);
 	// 	const userToken = JSON.parse(userTokenStr);

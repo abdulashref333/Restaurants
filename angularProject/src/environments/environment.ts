@@ -9,8 +9,8 @@ export const environment = {
   redirectUri: 'http://localhost:4200',
   responseType: 'id_token token',
   scope: 'microservice1 microservice2',
-  authenticationServiceUrl: 'http://localhost:3000/WeatherForecast',
-  crudServiceUrl: 'http://localhost:3001/WeatherForecast'
+  authenticationServiceUrl: 'http://localhost:3000/api',
+  crudServiceUrl: 'http://localhost:3001/api'
 };
 
 /*
