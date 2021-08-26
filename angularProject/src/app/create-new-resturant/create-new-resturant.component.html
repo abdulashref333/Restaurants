@@ -1,0 +1,15 @@
+<form [formGroup]="resturantForm">
+  <div>
+    <input type="text" placeholder="Enter Resturant Name" formControlName="name" />
+  </div>
+  <div>
+    <input type="text-area" placeholder="Enter A Describtion" formControlName="describtion" />
+  </div>
+
+  <div formGroupName="address">
+    <input type="text" placeholder="Enter City" formControlName="city" />
+    <input type="text" placeholder="Enter Street" formControlName="street" />
+  </div>
+
+  <button (click)="submit()">Submit</button>
+</form>

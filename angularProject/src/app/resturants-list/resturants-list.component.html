@@ -1,1 +1,12 @@
-<p>resturants-list works!</p>
+<div>
+  <div>
+    <input #searchInput  type="text" placeholder="Search With Name"  />
+    <input #searchInputCity  type="text" placeholder="Search With city"  />
+  </div>
+
+  <div class="resturant-box" *ngFor="let resturant of resturants$ | async">
+    <h2> {{resturant?.name}} </h2>
+    <p>|IN {{resturant?.address[0].city}} </p>
+    <button (click)="getDetails()">Details</button>
+  </div>
+</div>

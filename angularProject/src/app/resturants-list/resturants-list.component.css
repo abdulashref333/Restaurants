@@ -1,0 +1,10 @@
+.resturant-box{
+  border: 1px solid gray;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 3rem;
+  margin: 1rem 0;
+}
+.resturant-box h2{
+  margin-right: 3rem;
+}
