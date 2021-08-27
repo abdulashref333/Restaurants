@@ -1,117 +1,22 @@
 const express = require('express');
 const route = express.Router();
-const {Resturant} = require('../model/resturant');
 const {authorize} = require('../middleware/authorize');
+const {
+    getResturantsByQuery,
+    creatResturant,
+    getResturantById,
+    updateResturant,
+    deleteResturant
+  } = require('../controller/resturantControle');
 
-route.get('/', async (req, res) => {
-  
-  try {
-    let resturantName = req.query.name;
-    let resturantCity = req.query.city;
-    let resturants;
-    
-    if(resturantName && !resturantCity){
-      const $regex = RegExp(`${resturantName}`);
-      resturants = await Resturant.find({name: $regex}).exec();
-    
-    }else if(resturantCity && !resturantName){
-      resturants = await Resturant.find({'address.city': resturantCity}).exec();
-      
-    }else if( resturantName && resturantCity){
-      const $regex = RegExp(`${resturantName}`);
-      resturants = await Resturant.find({name: $regex, 'address.city': resturantCity}).exec();
-    }else{
-      resturants = await Resturant.find({});
-    }
+route.get('/', getResturantsByQuery)
 
-    res.send(resturants);  
+route.post('/', authorize, creatResturant)
 
-  } catch (error) {
-    res.status(500).send({error});
-  }
-})
+route.get('/:id', getResturantById)
 
-route.get('/', async (req, res) => {
-  const resturants = await Resturant.find({});
-  res.send(resturants);
-})
+route.patch('/:id', authorize, updateResturant)
 
-route.post('/', authorize, async(req, res) => {
-  console.log('i am here..', req.body)
-  try {
-
-    console.log('req body: ', req.body)
-    const resturant = new Resturant({
-      name: req.body.name,
-      address: req.body.address,
-      userId: req.userId
-    })
-    // console.log('resturant : ', resturant)
-    await resturant.save();
-    res.send({resturant});
-
-  } catch (error) {
-    res.status(500).send({error})
-  }
-})
-
-route.delete('/:id', authorize, async (req, res) => {
-  try {
-    const resturantId = req.params
-    
-    if(!resturantId) return res.status(400).send({error: 'id was not found'});
-    let resturant = await Resturant.find({_id: req.params.id, userId:req.userId}).exec();
-    // console.log('i am here..')
-    // console.log('resbonse: ', resturant)
-    // console
-    if(!resturant.length) return res.status(401).send({error: 'no resturant with this id'});
-
-    resturant = await Resturant.findByIdAndRemove(req.params.id).exec();
-    res.send({sucess:true});
-
-  } catch (error) {
-    res.status(500).send({error})
-  }
-})
-
-//patch...
-
-route.patch('/:id', authorize, async(req, res) => {
-  try {
-
-    const resturantId = req.params.id;
-    const updates = [];
-    const body = req.body;
-    const resturant = await Resturant.findById(resturantId);
-    
-    if(body.name){
-      updates.push({name: body.name});
-    }
-    if(body.description){
-      updates.push({description: body.description});
-    }
-    if(body.address){
-      updates.push({address: body.address})
-    }
-    console.log('i am here...', updates)
-    
-    updates.forEach(update => {
-      if(update.name){
-        resturant.name = update.name;
-      }else if( update.description){
-        resturant.description = update.description;
-      }else{
-       //update address array. 
-        resturant.address = update.address;
-      }
-    })
-
-    const updatedResturant = await Resturant.findOneAndUpdate({_id:resturantId}, resturant, {new: true});
-    res.json(updatedResturant);
-
-  } catch (error) {
-    res.status(500).json(error);
-  }
-})
+route.delete('/:id', authorize, deleteResturant)
 
 module.exports = route;
