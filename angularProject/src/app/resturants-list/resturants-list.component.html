@@ -1,12 +1,42 @@
 <div>
-  <div>
-    <input #searchInput  type="text" placeholder="Search With Name"  />
-    <input #searchInputCity  type="text" placeholder="Search With city"  />
+  <div *ngIf="hasError">
+    <p>{{error}}</p>
   </div>
-
-  <div class="resturant-box" *ngFor="let resturant of resturants$ | async">
-    <h2> {{resturant?.name}} </h2>
-    <p>|IN {{resturant?.address[0].city}} </p>
-    <button (click)="getDetails()">Details</button>
+  <div class="search">
+    <div>
+      <label for="nameSearch">Search By Name:</label>
+      <input #searchInput  type="text" placeholder="Search With Name"  />
+    </div>
+    <div>
+      <label for="nameSearch">Search By City:</label>
+      <input #searchInputCity  type="text" placeholder="Search With city"  />
+    </div>
+  </div>
+  <hr>
+  <!-- logged in user section -->
+  <div>
+    <h2>Your Own Resturants</h2>
+    <div class="resturant-box" *ngFor="let resturant of userResturants">
+      <div>
+        <h2> {{resturant?.name}}</h2>
+        <p>IN {{resturant?.address[0].city}} </p>
+      </div>
+      <div>
+        <button class="btn" (click)="getDetails(resturant._id)">Details</button>
+        <button class="btn edit" (click)="editResturant(resturant._id)">Edit</button>
+        <button class="btn delete" (click)="deleteResturant(resturant._id)">Delete</button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <h2>Others Resturants</h2>
+    <div class="resturant-box" *ngFor="let resturant of resturants$ | async">
+      <div>
+        <h2> {{resturant?.name}}</h2>
+        <p>IN {{resturant?.address[0].city}} </p>
+      </div>
+      <button class="btn" (click)="getDetails(resturant._id)">Details</button>
+    </div>
   </div>
 </div>

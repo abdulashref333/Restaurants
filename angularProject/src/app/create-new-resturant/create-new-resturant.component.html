@@ -1,15 +1,25 @@
-<form [formGroup]="resturantForm">
-  <div>
-    <input type="text" placeholder="Enter Resturant Name" formControlName="name" />
-  </div>
-  <div>
-    <input type="text-area" placeholder="Enter A Describtion" formControlName="describtion" />
-  </div>
+<div class="form-container">
+  <form class="form" [formGroup]="resturantForm">
+    <div>
+      <label for="name">Resturant Name</label><br>
+      <input id="name" type="text" placeholder="Enter Resturant Name" formControlName="name" required/>
+    </div>
+    <div formGroupName="address">
+      <div>
+        <label for="city">City</label><br>
+        <input id="city" type="text" placeholder="Enter City" formControlName="city" required />
+      </div>
+      <div>
+        <label for="street">Street</label><br>
+        <input id="street"type="text" placeholder="Enter Street" formControlName="street" />
+      </div>
+    </div>
 
-  <div formGroupName="address">
-    <input type="text" placeholder="Enter City" formControlName="city" />
-    <input type="text" placeholder="Enter Street" formControlName="street" />
-  </div>
+    <div>
+      <label for="description">description</label><br>
+      <textarea id="description" type="text" placeholder="Enter A Describtion" formControlName="description"></textarea>
+    </div>
 
-  <button (click)="submit()">Submit</button>
-</form>
+    <button [disabled]="resturantForm.invalid" class="btn" (click)="submit()">Submit</button>
+  </form>
+</div>

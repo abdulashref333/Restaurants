@@ -1,0 +1,16 @@
+<div class="details-box" *ngIf="(resturant$ | async) as resturant">
+  <div class="box">
+    <div class="row">
+      <h3>Resturant Name:</h3>
+      <p id="name">{{resturant?.name}}</p>
+    </div>
+    <div class="row">
+      <h3>Address:</h3>
+      <p> {{resturant?.address[0].city}} / {{resturant?.address[0].street}} </p>
+    </div>
+    <div>
+      <h3> Description: </h3>
+      <p> {{resturant?.description}} </p>
+    </div>
+  </div>
+</div>

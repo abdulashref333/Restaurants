@@ -2,9 +2,26 @@
   border: 1px solid gray;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 1rem 3rem;
   margin: 1rem 0;
 }
 .resturant-box h2{
   margin-right: 3rem;
+}
+.resturant-box button{
+  margin: 0 5px;
+}
+
+hr{
+  margin: 1rem 0;
+}
+.search{
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+}
+.search input{
+  padding: .2rem .4rem;
+  margin: 1rem 0;
 }

@@ -1,0 +1,21 @@
+.details-box{
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  padding: 3rem 4rem;
+}
+.row{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 1rem 0;
+}
+.row h3{
+  margin-right: 10px;
+}

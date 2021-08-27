@@ -1,15 +1,22 @@
-<form [formGroup]="loginForm" autocomplete="off">
-  <div *ngIf="signup">
-    <input matInput type="text" placeholder="Enter Your Name" formControlName="name" autocomplete="off" />
-  </div>
-  <div>
-    <input matInput type="text" placeholder="Enter Your Email" formControlName="email" autocomplete="off" />
-  </div>
+<div class="form-container">
+  <form class="form" [formGroup]="loginForm">
+    <div *ngIf="signup">
+      <label for="name">Name</label><br>
+      <input id="name" type="text" placeholder="Enter Your Name" formControlName="name" required />
+    </div>
+    <div>
+      <label for="email">Email</label><br>
+      <input id="email" type="email" placeholder="Enter Your Email" formControlName="email" required />
+    </div>
 
-  <div>
-    <input matInput type="password" placeholder="" formControlName="password" autocomplete="off" />
-  </div>
+    <div>
+      <label for="password">password</label><br>
+      <input id="password" type="password" placeholder="Enter Your Password" formControlName="password" required />
+    </div>
 
-  <button (click)="submit()">Login</button>
-  <button *ngIf="!signup" (click)="showSignup()">Signup</button>
-</form>
+    <button  class="btn edit" *ngIf="!signup" (click)="submit()">Login</button>
+    <button class="btn" *ngIf="!signup" (click)="showSignup()">Signup</button>
+    <button  *ngIf="signup" [disabled]="loginForm.invalid" (click)="submit()">Submit</button>
+
+  </form>
+</div>

@@ -3,12 +3,17 @@
     <li>
       <a [routerLink]="'/resturants'">Resturants</a>
     </li>
-    <li *ngIf="true">
+    <li *ngIf="isLoggedIn">
       <a [routerLink]="'/resturants/new'">Creat New Resturant</a>
     </li>
-    <li>
+    <li *ngIf="!isLoggedIn;else loggedOut">
       <a [routerLink]="'/auth'">Login</a>
     </li>
+    <ng-template #loggedOut>
+      <li>
+        <a (click)="logOut()">LogOut</a>
+      </li>
+    </ng-template>
   </ul>
 </nav>
 
