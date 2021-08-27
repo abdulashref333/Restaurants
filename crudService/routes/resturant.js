@@ -1,8 +1,7 @@
 const express = require('express');
 const route = express.Router();
-const got = require('got');
 const {Resturant} = require('../model/resturant');
-const AUTHENTICATION_URL = 'http://localhost:3000';
+const {authorize} = require('../middleware/authorize');
 
 route.get('/', async (req, res) => {
   
@@ -37,25 +36,17 @@ route.get('/', async (req, res) => {
   res.send(resturants);
 })
 
-route.post('/', async(req, res) => {
-  // console.log('i am here..', req.body)
+route.post('/', authorize, async(req, res) => {
+  console.log('i am here..', req.body)
   try {
-
-    const {body, statusCode} = await got(AUTHENTICATION_URL+'/api/auth/me', {
-      headers: {authorization: req.headers.authorization},
-      responseType: 'json'
-    })
-
-    console.log('resbonse: ', {body, statusCode});
-    if( statusCode !== 200 || !body.userId) return res.status(401).send({error:'unautorized user'});
 
     console.log('req body: ', req.body)
     const resturant = new Resturant({
       name: req.body.name,
       address: req.body.address,
-      userId: body.userId
+      userId: req.userId
     })
-
+    // console.log('resturant : ', resturant)
     await resturant.save();
     res.send({resturant});
 
@@ -64,22 +55,16 @@ route.post('/', async(req, res) => {
   }
 })
 
-route.delete('/:id', async (req, res) => {
+route.delete('/:id', authorize, async (req, res) => {
   try {
     const resturantId = req.params
-    const {body, statusCode} = await got(AUTHENTICATION_URL+'/api/auth/me', {
-      headers: {authorization: req.headers.authorization},
-      responseType: 'json'
-    })
-
-    if( statusCode !== 200 || !body.userId) return res.status(401).send({error:'unautorized user'});
-    console.log('resbonse: ', {body, statusCode});
-
-    if(!resturantId) return res.status(404).send({error: 'id was not found'});
-    let resturant = await Resturant.find({_id: req.params.id, userId:body.userId}).exec();
-    console.log('resbonse: ', resturant)
+    
+    if(!resturantId) return res.status(400).send({error: 'id was not found'});
+    let resturant = await Resturant.find({_id: req.params.id, userId:req.userId}).exec();
+    // console.log('i am here..')
+    // console.log('resbonse: ', resturant)
     // console
-    if(!resturant.length) return res.status(404).send({error: 'no resturant with this id'});
+    if(!resturant.length) return res.status(401).send({error: 'no resturant with this id'});
 
     resturant = await Resturant.findByIdAndRemove(req.params.id).exec();
     res.send({sucess:true});
@@ -90,4 +75,43 @@ route.delete('/:id', async (req, res) => {
 })
 
 //patch...
+
+route.patch('/:id', authorize, async(req, res) => {
+  try {
+
+    const resturantId = req.params.id;
+    const updates = [];
+    const body = req.body;
+    const resturant = await Resturant.findById(resturantId);
+    
+    if(body.name){
+      updates.push({name: body.name});
+    }
+    if(body.description){
+      updates.push({description: body.description});
+    }
+    if(body.address){
+      updates.push({address: body.address})
+    }
+    console.log('i am here...', updates)
+    
+    updates.forEach(update => {
+      if(update.name){
+        resturant.name = update.name;
+      }else if( update.description){
+        resturant.description = update.description;
+      }else{
+       //update address array. 
+        resturant.address = update.address;
+      }
+    })
+
+    const updatedResturant = await Resturant.findOneAndUpdate({_id:resturantId}, resturant, {new: true});
+    res.json(updatedResturant);
+
+  } catch (error) {
+    res.status(500).json(error);
+  }
+})
+
 module.exports = route;
