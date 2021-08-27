@@ -21,6 +21,11 @@ const resturantSchema = new mongoose.Schema({
   
 });
 
+//this for running schema validation before update operation.
+resturantSchema.pre('findOneAndUpdate', function(next) {
+  this.options.runValidators = true;
+  next();
+});
 
 const Resturant = mongoose.model('resturant', resturantSchema);
 module.exports.Resturant = Resturant;

@@ -58,15 +58,4 @@ userSchema.methods.toJSON  = function (){
 }
 const User = mongoose.model('users',userSchema);
 
-// function validarUser(data) {
-//     const schema = joi.object({
-//       name: joi.string().required().min(3).max(50),
-//       email: joi.string().required().min(5).max(50).email(),
-//       password: joi.string().required().min(8).max(50)
-//     });
-  
-//     return schema.validate(data);
-//   }
-
-// module.exports.validarUser = validarUser;
 module.exports.User = User;
