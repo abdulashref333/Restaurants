@@ -12,11 +12,13 @@ import { AuthService } from './services/auth.service';
 import { ResturantService } from './services/resturant.service';
 import { CreateNewResturantComponent } from './create-new-resturant/create-new-resturant.component';
 import { AuthGuard  } from './guards/auth.guard';
+import { ResturantDetailsComponent } from './resturant-details/resturant-details.component';
 @NgModule({
   declarations: [
     AppComponent,
     ResturantsListComponent,
-    CreateNewResturantComponent
+    CreateNewResturantComponent,
+    ResturantDetailsComponent
   ],
   imports: [
     BrowserModule,

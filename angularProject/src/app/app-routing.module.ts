@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {ResturantsListComponent} from './resturants-list/resturants-list.component';
 import {CreateNewResturantComponent} from './create-new-resturant/create-new-resturant.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ResturantDetailsComponent } from './resturant-details/resturant-details.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,15 @@ const routes: Routes = [
     path:'resturants/new',
     component: CreateNewResturantComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path:'resturants/edit/:id',
+    component: CreateNewResturantComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'resturants/:id',
+    component: ResturantDetailsComponent,
   },
   {path:'resturants', component: ResturantsListComponent},
   {path:'', component: ResturantsListComponent}

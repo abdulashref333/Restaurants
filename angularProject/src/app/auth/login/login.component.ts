@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { catchError, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,16 +14,21 @@ export class LoginComponent implements OnInit {
 	loginForm!: FormGroup;
   signupForm!: FormGroup;
   signup:boolean = false;
+  returnUrl:string = '';
 
   constructor(
     private authService:AuthService,
 		private fb: FormBuilder,
+    private router:Router,
+    private activatedRoute: ActivatedRoute,
 
   ) { }
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+			this.returnUrl = params.returnUrl || '/';
+		});
 		this.initLoginForm();
-
   }
 
   initLoginForm() {
@@ -53,7 +61,7 @@ export class LoginComponent implements OnInit {
       }
 
       console.log('i am her..')
-      if(this.signup && false){
+      if(this.signup){
         const user = {
           name: controls.name.value,
           email: controls.email.value,
@@ -62,7 +70,6 @@ export class LoginComponent implements OnInit {
         return this.authService.signUp(user);
       }else{
       }
-		// this.loading = true;
 
 		const authData = {
 			email: controls.email.value,
@@ -70,38 +77,17 @@ export class LoginComponent implements OnInit {
 		};
 		this.authService
 			.login(authData.email, authData.password)
-      console.log('i am after login')
-		// 	.pipe(
-		// 		tap(user => {
-		// 			if (user) {
-		// 				this.store.dispatch(new Login(user));
-
-		// 				this.router.navigateByUrl(this.returnUrl); // Main page
-
-		// 			} else {
-		// 				this.authNoticeService.setNotice(this.translate.instant('AUTH.VALIDATION.INVALID_LOGIN'), 'danger');
-		// 			}
-		// 		}),
-		// 		takeUntil(this.unsubscribe),
-		// 		finalize(() => {
-		// 			this.loading = false;
-		// 			this.cdr.markForCheck();
-		// 		}),
-		// 		catchError(err => {
-		// 			this.loading = false;
-		// 			this.cdr.markForCheck();
-		// 			console.log('error ==> ', err)
-		// 			if (err.error && err.error.error && err.error.error.statusCode && err.error.error.statusCode == 401) {
-		// 				this.authNoticeService.setNotice(this.translate.instant('AUTH.VALIDATION.INVALID_LOGIN'), 'danger');
-		// 			} else if (err.error && err.error.error && err.error.error.statusCode && err.error.error.statusCode == 403) {
-		// 				this.authNoticeService.setNotice(this.translate.instant('AUTH.VALIDATION.USER_BLOCKED'), 'danger');
-		// 			} else {
-		// 				this.authNoticeService.setNotice(this.translate.instant('AUTH.VALIDATION.BACKEND_ERROR'), 'danger');
-		// 			}
-		// 			return of(null);
-		// 		})
-		// 	)
-		// 	.subscribe();
+			.pipe(
+				tap(user => {
+					if (user) {
+            this.router.navigate([`${this.returnUrl}`])
+              .then(() => {
+                window.location.reload();
+              });
+          }
+				})
+			)
+			.subscribe();
 	}
   showSignup(){
     this.signup = true;
