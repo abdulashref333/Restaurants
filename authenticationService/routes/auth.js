@@ -15,8 +15,10 @@ route.get('/me', async (req, res, next) => {
     console.log(user);
 
     if (!user) return res.status(401).send('invalid token');
+    // modifing the user object befor sending.
     user.userId = user.id ;
     delete user.id;
+    
     res.send(user);
     
   } catch (error) {
