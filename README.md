@@ -1,4 +1,13 @@
-# Qurba-Task
+# Restaurants  
+- it's a full-stack application example developed useing mean stack technologies.  
+- The application is designed as microservices each one of them responsible for one big task or resource.  
+- There is the explanation for every service of them:  
+## Authentication Service:  
+- it's responsible for all authentication tasks like sign the users up for creating new user and also for login.  
+- i'm using jwt as a method for authentication and authorization.  
+## Crud Service:  
+- it's responsible for all crud operations for restaurants. so if you need to create a new resturants you should talk to this service.  
+
 # Notes: 
 please add ```.env``` file for each project befor start.  
 
