@@ -8,14 +8,18 @@ const {
     updateResturant,
     deleteResturant
   } = require('../controller/resturantControle');
+const {
+ validateNewRestaurant,
+ validateOldRestaurant
+} = require('../middleware/validResturants');
 
 route.get('/', getResturantsByQuery)
 
-route.post('/', authorize, creatResturant)
+route.post('/', [authorize, validateNewRestaurant], creatResturant)
 
 route.get('/:id', getResturantById)
 
-route.patch('/:id', authorize, updateResturant)
+route.patch('/:id', [authorize, validateOldRestaurant], updateResturant)
 
 route.delete('/:id', authorize, deleteResturant)
 
