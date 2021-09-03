@@ -8,14 +8,18 @@
 ## Crud Service:  
 - it's responsible for all crud operations for restaurants. so if you need to create a new resturants you should talk to this service.  
 
+## Commone Service:  
+- it's simply an npm package that have all common code i need on the two other services. the package has all authentication stratigies and common validation code.
+
 # Notes: 
 please add ```.env``` file for each project befor start.  
 
 * for authenticaionService and crudService projects as example below:  
+```
 PORT= 3000  
 HOST=mongodb://localhost:27017/qurbaAuthentication  
 JWT_SCERET_KEY=thisMyjwtSecretKeyandtheSecretis2202  
-
+```
 I could not figure out the common code to make it on seperate package so the common code project is empity:  
 * I hope to discuss this point on interview.  
 ## architecture for each project:  
